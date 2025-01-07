@@ -1,0 +1,7 @@
+# The "bigquery.dataViewer" role is provided to the consumers declared in each dataset:
+# - While opening a PR, to the datasets created with the DBT test target in the dev project.
+# Those are the datasets prefixed with "<PR number>_merge_". This allows to confirm the permissions are correct before merging the PR.
+# - While merging a PR, to the production datasets (datasets created with the DBT prod target in the prod project)
+# - While triggered manually from the GitHub UI, to the production datasets (datasets created with the DBT prod target in the prod project)
+# The documentation is available here: https://confluence.keringapps.com/pages/viewpage.action?pageId=744449658
+datasets: []

@@ -1,0 +1,41 @@
+config-version: 2
+ 
+name: industrial
+version: 0.1.0
+profile: data_product
+require-dbt-version: [">=1.6.0", "<1.7.0"]
+ 
+model-paths:
+  - "dbt/models"
+macro-paths:
+  - "dbt/macros"
+analysis-paths:
+  - "dbt/analyses"
+seed-paths:
+  - "dbt/seeds"
+test-paths:
+  - "dbt/tests"
+target-path: "target"
+packages-install-path: "dbt/dbt_packages"
+ 
+models:
+  +persist_docs:
+    relation: true
+    columns: true
+  industrial:
+    incremental:
+      +schema: incremental
+    public:
+      +schema: gold_layer
+    +labels:
+      brand: brs
+      domain: manufacturing
+      environment: "{{ target.name }}"
+vars:
+  table_name_anagraficapause: "{{ 'brioni-temera-gcp-qa-anagrafica-pause' if target.name == 'dev' else 'brioni-temera-gcp-anagrafica-pause' }}"
+  table_name_interruzioni: "{{ 'brioni-temera-gcp-qa-interruzioni' if target.name == 'dev' else 'brioni-temera-gcp-interruzioni' }}"
+  table_name_loglavorazione: "{{ 'brioni-temera-gcp-qa-loglavorazione' if target.name == 'dev' else 'brioni-temera-gcp-loglavorazione' }}"
+  table_name_loglavorazionerow: "{{ 'brioni-temera-gcp-qa-loglavorazionerow' if target.name == 'dev' else 'brioni-temera-gcp-loglavorazionerow' }}"
+  table_name_userlog: "{{ 'brioni-temera-gcp-qa-userlogs' if target.name == 'dev' else 'brioni-temera-gcp-userlogs' }}"
+  table_name_users: "{{ 'brioni-temera-gcp-qa-users' if target.name == 'dev' else 'brioni-temera-gcp-users' }}"
+

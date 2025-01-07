@@ -1,0 +1,3 @@
+*
+!dbt/models
+!dbt/models/**/*

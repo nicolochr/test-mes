@@ -1,0 +1,4 @@
+dbt-bigquery==1.6.9
+sqlfluff==3.0.6
+sqlfluff-templater-dbt==3.0.6
+grpcio==1.49.1

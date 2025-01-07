@@ -1,0 +1,8 @@
+# Python related
+venv
+.venv
+
+# dbt generated folders and files
+dbt_packages
+target
+logs

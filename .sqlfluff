@@ -1,0 +1,59 @@
+[sqlfluff]
+templater = dbt
+dialect = bigquery
+exclude_rules = L027
+max_line_length = 100
+ 
+[sqlfluff:templater:dbt]
+project_dir = .
+profiles_dir = .
+profile = data_product
+target = dev
+ 
+[sqlfluff:templater:jinja]
+apply_dbt_builtins = True
+
+[sqlfluff:rules:aliasing.self_alias.column]
+ignore_self_alias = True
+
+[sqlfluff:rules:layout.end_of_file]
+require_final_newline = True
+
+[sqlfluff:layout:type:alias_expression]
+# Documentation is available here: https://docs.sqlfluff.com/en/stable/layout.html#aligned-elements
+# We want non-default spacing _before_ the alias expressions.
+spacing_before = align
+# We want to align them within the next outer select clause.
+# This means for example that alias expressions within the FROM
+# or JOIN clause would _not_ be aligned with them.
+align_within = select_clause
+# The point at which to stop searching outward for siblings, which
+# in this example would likely be the boundary of a CTE. Stopping
+# when we hit brackets is usually a good rule of thumb for this
+# configuration.
+align_scope = bracketed
+ 
+[sqlfluff:indentation]
+tab_space_size = 4
+ 
+[sqlfluff:rules:layout.indent]
+# Examples available here: https://docs.sqlfluff.com/en/stable/rules.html#sqlfluff.rules.Rule_L004
+# Whether to use tabs or spaces to add new indents. Must be one of ['space', 'tab'].
+indent_unit = space
+# The number of spaces to consider equal to one tab. Used in the fixing step of this rule. Must be one of range(0, 100).
+ 
+[sqlfluff:rules:capitalisation.keywords]
+# Keywords,  Must be one of ['consistent', 'upper', 'lower', 'pascal', 'capitalise']
+# Examples available here: https://docs.sqlfluff.com/en/stable/rules.html#sqlfluff.rules.Rule_L010
+capitalisation_policy = consistent
+# Comma separated list of words to ignore for this rule
+ 
+[sqlfluff:rules:capitalisation.identifiers]
+# Unquoted identifiers, Must be one of ['consistent', 'upper', 'lower', 'pascal', 'capitalise']
+# Example available here: https://docs.sqlfluff.com/en/stable/rules.html#sqlfluff.rules.Rule_L014
+extended_capitalisation_policy = consistent
+ 
+[sqlfluff:rules:capitalisation.functions]
+# Function names, Must be one of ['consistent', 'upper', 'lower', 'pascal', 'capitalise']
+# Example available here: https://docs.sqlfluff.com/en/stable/rules.html#sqlfluff.rules.Rule_L030
+extended_capitalisation_policy = consistent

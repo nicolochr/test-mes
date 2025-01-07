@@ -1,0 +1,28 @@
+data_product:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: oauth
+      project: br-stylewhere-industrial-dev
+      dataset: manufacturing_industrial
+      location: EU
+      threads: 5
+    test:
+      type: bigquery
+      method: oauth
+      project: br-stylewhere-industrial-dev
+      dataset: "{{env_var('GITHUB_REF_NAME', default='noref') | replace('/', '_') | replace('-', '_')}}_manufacturing_industrial"
+      location: EU
+      threads: 5
+    prod:
+      type: bigquery
+      method: oauth
+      project: br-stylewhere-industrial-prod
+      keyfile: /path/to/your/service-account-key.json
+      dataset: manufacturing_industrial
+      location: EU
+      threads: 5
+
+config:
+  send_anonymous_usage_stats: false

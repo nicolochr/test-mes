@@ -1,0 +1,26 @@
+dataProductDescriptor: 1.0.0
+
+info:
+  fullyQualifiedName: br-stylewhere-industrial
+  version: 0.1.0
+  domain: manufacturing
+  brand: br
+  owner:
+    id: ""
+    name: team/brmis
+  description: Industrial data product has been created to address the needs to do Power BI reporting on top of "Brioni Stylewhere Temera" app.
+  links:
+    main_documentation: https://confluence.keringapps.com/pages/viewpage.action?spaceKey=GCP&title=BR+Industrial+MES+-+Data+Flow
+    others: []
+#    - value: https://link.com/to/your/doc
+#      comment: enter a comment about the page
+
+orchestration:
+  startAfter: "2022-11-28T10:00:00Z"
+  trigger:
+    cron: "0 22 * * *"
+
+  environment:
+    SOURCE_UNSET: SOURCE_PROJECT_UNSET
+
+gcs_ingestion: true

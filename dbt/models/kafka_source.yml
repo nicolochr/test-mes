@@ -1,0 +1,35 @@
+version: 2
+ 
+sources:
+  # one source name is a unique combination of a schema and a database
+  # if you want you can split also your sources by database
+  # Another source could be referenced after
+  # name of the source. This will be used to call a source table in the models themselves
+  - name: kafka_landing
+    # name of the source database (this is a project id)
+   # database: "br-stylewhere-industrial-dev"
+    database: br-stylewhere-industrial-{{target.name}}
+    # name of the source dataset on bigquery
+    schema: kafka_landing
+    # source description, this will show in the dbt docs
+    description: "Dataset that contains daily kafka streams"
+    tables:
+      # name of the table in the GCP project
+      - name: brioni-temera-gcp-qa-interruzioni
+   #brioni-temera-gcp-qa-interruzioni
+      - name: brioni-temera-gcp-qa-anagrafica-pause
+      - name: brioni-temera-gcp-qa-users
+      - name: brioni-temera-gcp-qa-userlogs
+      - name: brioni-temera-gcp-qa-loglavorazione
+      - name: brioni-temera-gcp-qa-loglavorazionerow
+    #tabella test per inizializzazione code
+      - name: brioni-temera-gcp-qa-pausa
+    
+    #tabelle prod
+
+      - name: brioni-temera-gcp-loglavorazione
+      - name: brioni-temera-gcp-loglavorazionerow
+      - name: brioni-temera-gcp-users
+      - name: brioni-temera-gcp-userlogs
+      - name: brioni-temera-gcp-anagrafica-pause
+      - name: brioni-temera-gcp-interruzioni
