@@ -24,5 +24,3 @@ data_product:
       location: EU
       threads: 5
 
-config:
-  send_anonymous_usage_stats: false

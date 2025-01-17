@@ -12,13 +12,7 @@ target = dev
  
 [sqlfluff:templater:jinja]
 apply_dbt_builtins = True
-
-[sqlfluff:rules:aliasing.self_alias.column]
-ignore_self_alias = True
-
-[sqlfluff:rules:layout.end_of_file]
-require_final_newline = True
-
+ 
 [sqlfluff:layout:type:alias_expression]
 # Documentation is available here: https://docs.sqlfluff.com/en/stable/layout.html#aligned-elements
 # We want non-default spacing _before_ the alias expressions.

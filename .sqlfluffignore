@@ -1,3 +1,4 @@
 *
+!dbt/macros
 !dbt/models
 !dbt/models/**/*

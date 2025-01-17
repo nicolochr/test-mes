@@ -1,5 +1,42 @@
 version: 2
- 
+models:
+  - name: anagrafica_pause_incremental  
+    columns:
+      - name: pk  
+        description: "Unique identifier for this model."
+        tests:
+          - unique
+  - name: interruzioni_incremental  
+    columns:
+      - name: pk  
+        description: "Unique identifier for this model."
+        tests:
+          - unique
+  - name: loglavorazione_incremental 
+    columns:
+      - name: pk  
+        description: "Unique identifier for this model."
+        tests:
+          - unique
+  - name: loglavorazionerow_incremental  
+    columns:
+      - name: pk  
+        description: "Unique identifier for this model."
+        tests:
+          - unique
+  - name: userlogs_incremental  
+    columns:
+      - name: pk  
+        description: "Unique identifier for this model."
+        tests:
+          - unique
+  - name: users_incremental  
+    columns:
+      - name: pk  
+        description: "Unique identifier for this model."
+        tests:
+          - unique
+
 sources:
   # one source name is a unique combination of a schema and a database
   # if you want you can split also your sources by database

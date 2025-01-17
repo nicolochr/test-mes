@@ -17,14 +17,20 @@ test-paths:
   - "dbt/tests"
 target-path: "target"
 packages-install-path: "dbt/dbt_packages"
+
+
+flags:
+  send_anonymous_usage_stats: false
+
  
 models:
   +persist_docs:
     relation: true
     columns: true
   industrial:
-    incremental:
-      +schema: incremental
+    private:
+      work:
+        +schema: incremental
     public:
       +schema: gold_layer
     +labels:
