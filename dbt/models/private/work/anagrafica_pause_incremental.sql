@@ -2,54 +2,43 @@
   config(
     materialized = 'incremental',
     unique_key = 'pk',
-    incremental_strategy='merge'
-    )
+    incremental_strategy = 'merge',
+    partition_by = {
+        'field': 'partitiontime',
+        'data_type': 'timestamp',
+        'granularity': 'day'
+    }
+  )
 }}
 
 WITH kafka_data AS (
     SELECT
-        PARSE_JSON(payload)                     AS parsed_payload,
-        CAST(kafka_meta.inserttime AS TIMESTAMP) AS inserttime_tstamp
+        CAST(JSON_VALUE(payload, "$.pk") AS INT64)                AS pk,
+        CAST(JSON_VALUE(payload, "$.endDate") AS STRING)          AS enddate_value,
+        CAST(JSON_VALUE(payload, "$.startDate") AS STRING)        AS startdate_value,
+        CAST(JSON_VALUE(payload, "$.startValidity") AS TIMESTAMP)
+            AS startvalidity_tstamp,
+        CAST(JSON_VALUE(payload, "$.endValidity") AS TIMESTAMP)
+            AS endvalidity_tstamp,
+        CAST(kafka_meta.inserttime AS TIMESTAMP)
+            AS inserttime_tstamp,
+        CAST(_partitiontime AS TIMESTAMP)                         AS partitiontime
     FROM {{ source('kafka_landing', var('table_name_anagraficapause')) }}
 ),
 
-parsed_data AS (
-    SELECT
-        CAST(parsed_payload.data.pk AS INT64)                AS pk,
-        CAST(parsed_payload.data.enddate AS STRING)          AS enddate_value,
-        CAST(parsed_payload.data.startdate AS STRING)        AS startdate_value,
-        CAST(parsed_payload.data.startvalidity AS TIMESTAMP)
-            AS startvalidity_tstamp,
-        CAST(parsed_payload.data.endvalidity AS TIMESTAMP)
-            AS endvalidity_tstamp,
-        CAST(parsed_payload.data.inserttime AS TIMESTAMP)
-            AS inserttime_tstamp
-    FROM kafka_data
-),
-
 new_data AS (
-    {% if is_incremental() %}
-        SELECT *
-        FROM parsed_data
-        WHERE _partitiontime >= TIMESTAMP_SUB(
-            (SELECT MAX(_partitiontime) FROM {{ this }}),
-            INTERVAL 1 DAY
-        )
-    {% else %}
-        SELECT *
-        FROM  parsed_data 
-    {% endif %}
+    SELECT *
+    FROM kafka_data
+    WHERE {{ apply_incremental_filter('partitiontime') }}
 ),
 
 dedupped AS (
-    SELECT *
-    FROM new_data
-    WHERE TRUE
-    QUALIFY
-        ROW_NUMBER() OVER (
-            PARTITION BY pk
-            ORDER BY inserttime_tstamp DESC
-        ) = 1
+    {{ dbt_utils.deduplicate(
+      relation='new_data',
+      partition_by='pk',
+      order_by='inserttime_tstamp desc',
+     )
+  }}
 )
 
 SELECT *

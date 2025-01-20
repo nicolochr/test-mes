@@ -1,12 +1,7 @@
-{% macro incremental_logic(source_table) %}
+{% macro apply_incremental_filter(partition_field) %}
     {% if is_incremental() %}
-        SELECT *
-        FROM source_table 
-        WHERE _PARTITIONTIME >= TIMESTAMP_SUB(
-            (SELECT MAX(_PARTITIONTIME) FROM {{ this }}),
-            INTERVAL 1 DAY)
+        TIMESTAMP_TRUNC({{ partition_field }}, DAY) > TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 1 DAY)
     {% else %}
-        SELECT *
-        FROM  source_table 
+        {{ partition_field }} > TIMESTAMP("1900-01-01 00:00:00")
     {% endif %}
 {% endmacro %}
