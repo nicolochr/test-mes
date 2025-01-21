@@ -58,9 +58,10 @@ WITH kafka_data AS (
 ),
 
 new_data AS (
-    SELECT *
-    FROM kafka_data
-    WHERE {{ apply_incremental_filter('partitiontime') }}
+    {{ apply_incremental_filter(
+        source_table='kafka_data',
+        partition_field='partitiontime'
+    ) }}
 ),
 
 dedupped AS (

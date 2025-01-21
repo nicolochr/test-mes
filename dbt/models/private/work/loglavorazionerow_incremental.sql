@@ -16,6 +16,7 @@ WITH kafka_data AS (
         CAST(JSON_VALUE(payload, '$.creationdate') AS TIMESTAMP)
             AS creationdate_tstamp,
         CAST(JSON_VALUE(payload, '$.pk') AS INT64)                  AS pk,
+        CAST(JSON_VALUE(payload, '$.mezzoCapo') AS STRING)          AS mezzocapo,
         CAST(JSON_VALUE(payload, '$.codiceCiclo') AS STRING)
             AS codiceciclo_code,
         CAST(JSON_VALUE(payload, '$.conformation') AS STRING)
@@ -40,9 +41,10 @@ WITH kafka_data AS (
 ),
 
 new_data AS (
-    SELECT *
-    FROM kafka_data
-    WHERE {{ apply_incremental_filter('partitiontime') }}
+    {{ apply_incremental_filter(
+        source_table='kafka_data',
+        partition_field='partitiontime'
+    ) }}
 ),
 
 dedupped AS (
